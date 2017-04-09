@@ -44,6 +44,8 @@ class App extends Component {
     }
 
     this.updateUserToken(null);
+
+    this.props.history.push('/login');
   }
 
   async componentWillMount() {
