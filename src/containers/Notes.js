@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { invokeApig } from '../libs/awsLib';
+import { invokeApig, s3Upload } from '../libs/awsLib';
 import {
   FormGroup,
   FormControl,
@@ -61,7 +61,17 @@ class Notes extends Component {
     this.file = event.target.files[0];
   }
 
+  saveNote(note) {
+    return invokeApig({
+      path: `/notes/${this.props.match.params.id}`,
+      method: 'PUT',
+      body: note,
+    }, this.props.userToken);
+  }
+
   handleSubmit = async (event) => {
+    let uploadedFilename;
+
     event.preventDefault();
 
     if (this.file && this.file.size > config.MAX_ATTACHMENT_SIZE) {
@@ -70,6 +80,24 @@ class Notes extends Component {
     }
 
     this.setState({ isLoading: true });
+
+    try {
+
+      if (this.file) {
+        uploadedFilename = await s3Upload(this.file, this.props.userToken);
+      }
+
+      await this.saveNote({
+        ...this.state.note,
+        content: this.state.content,
+        attachment: uploadedFilename || this.state.note.attachment,
+      });
+      this.props.history.push('/');
+    }
+    catch(e) {
+      alert(e);
+      this.setState({ isLoading: false });
+    }
   }
 
   handleDelete = async (event) => {
