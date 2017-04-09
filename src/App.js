@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AWS from 'aws-sdk';
 import {
   withRouter,
   Link
@@ -41,6 +42,10 @@ class App extends Component {
 
     if (currentUser !== null) {
       currentUser.signOut();
+    }
+
+    if (AWS.config.credentials) {
+      AWS.config.credentials.clearCachedId();
     }
 
     this.updateUserToken(null);
