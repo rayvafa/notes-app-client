@@ -1,4 +1,7 @@
 export default {
+  s3: {
+    BUCKET: 'YOUR_S3_UPLOADS_BUCKET_NAME'
+  },
   apiGateway: {
     URL: 'https://YOUR_API_GATEWAY_URL',
   },
@@ -6,5 +9,7 @@ export default {
     USER_POOL_ID : 'YOUR_COGNITO_USER_POOL_ID',
     APP_CLIENT_ID : 'YOUR_COGNITO_APP_CLIENT_ID',
     MAX_ATTACHMENT_SIZE: 5000000,
+    REGION: 'YOUR_REGION',
+    IDENTITY_POOL_ID: 'YOUR_IDENTITY_POOL_ID',
   }
 };
